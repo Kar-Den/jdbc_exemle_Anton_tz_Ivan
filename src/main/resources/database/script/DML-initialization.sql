@@ -81,4 +81,8 @@ VALUES ('BOOK_TITLE_2', 'BOOK_GENRE_2', 'BOOK_AUTHOR_2');
 
 
 INSERT into TEST (DATA, MARK, USER_ID, DURATION, COMMENT)
-VALUES ('2020-09-10', 3, 6, '4:10', 'прошёл отлично');
+VALUES ('2020-09-07', 10, 6, '4:10', 'прошёл отлично');
+INSERT into TEST (DATA, MARK, USER_ID, DURATION, COMMENT)
+VALUES ('2020-09-08', 10, 1, '2:10', 'прошёл великолепно');
+INSERT into TEST (DATA, MARK, USER_ID, DURATION, COMMENT)
+VALUES ('2020-09-09', 10, 2, '3:15', 'сделал курто');
