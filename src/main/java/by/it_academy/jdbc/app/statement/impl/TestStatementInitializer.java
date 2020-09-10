@@ -7,7 +7,17 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class TestStatementInitializer implements StatementInitializer <Test> {
+public class TestStatementInitializer implements StatementInitializer<Test> {
+
+    @Override
+    public void getByIdQueryStatement(PreparedStatement stmt, long id) throws SQLException {
+        stmt.setLong(1, id);
+    }
+
+    @Override
+    public void deleteQueryStatement(PreparedStatement stmt, long id) throws SQLException {
+        stmt.setLong(1, id);
+    }
 
     @Override
     public void createQueryStatement(PreparedStatement ps, Test test) throws SQLException {

@@ -89,7 +89,13 @@ public class Runner {
         System.out.println("# test dao");
         TestDaoJdbcImpl testDaoJdbc = new TestDaoJdbcImpl();
         System.out.println("# create Test");
-        Test test = new Test(Date.valueOf("2020-09-10"), 7, 10, Time.valueOf("02:03:04"), "это было круто");
+        Test test = new Test();
+        test.setData(Date.valueOf("2020-09-10"));
+        test.setUser_id(7);
+        test.setMark(10);
+        test.setDuration(Time.valueOf("02:03:04"));
+        test.setComment("это было круто");
+
         testDaoJdbc.create(test);
 
         System.out.println("# getAll Test ");
@@ -103,7 +109,13 @@ public class Runner {
 
         System.out.println();
         System.out.println("# Update Test ");
-        Test testUpdate = new Test(Date.valueOf("2020-09-10"), 7, 5, Time.valueOf("10:05:06"), "это Update, детка у user_id=7");
+        Test testUpdate = Test.builder()
+                .data(Date.valueOf("2020-09-10"))
+                .user_id(7)
+                .mark(5)
+                .duration(Time.valueOf("10:05:06"))
+                .comment("это Update, детка у user_id=7")
+                .build();
         testDaoJdbc.update(testUpdate);
 
         System.out.println();
@@ -111,10 +123,27 @@ public class Runner {
         System.out.println(testDaoJdbc.getById(4));
 
         System.out.println();
-        System.out.println("# resultTestByUserID Test ");
-        testDaoJdbc.resultTestByUserID(7);
+        System.out.println("# getTestUserById Test ");
+        Test tu = testDaoJdbc.getTestWithUserById(4);
+        StringBuilder strTU = new StringBuilder();
+        strTU.append(tu.getUser().getName())
+                .append(" ")
+                .append(tu.getUser().getSurname())
+                .append(" ")
+                .append(tu.getMark())
+                .append(" ")
+                .append(tu.getData())
+                .append(" ")
+                .append(tu.getDuration())
+                .append(" ")
+                .append(tu.getComment());
+        System.out.println(strTU);
+        System.out.println(tu.strTestWithUser());
 
+        System.out.println(testDaoJdbc.getTestUserById(4).strTestWithUser());
 
+        testDaoJdbc.getAllTestWithUser().forEach(t-> System.out.println(t.strTestWithUser()));
+//        имя фамилия оценка дата проведения длительность коментарий
 //        SERVER.stop();
     }
 }

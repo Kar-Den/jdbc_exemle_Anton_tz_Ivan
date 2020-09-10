@@ -27,4 +27,11 @@ public class TestSqlQueryHolderImpl implements CrudJdbcSqlQueryHolder {
     public String deleteSql() {
         return "delete from test where id = ?";
     }
+
+
+
+    public String getTestUserByIdSql() {
+        return "select t.ID, t.USER_ID, NAME, SURNAME, MARK, DATA, DURATION, COMMENT from TEST t join USERS u on u.ID = t.user_id where t.ID=?;";
+    }
+
 }

@@ -2,9 +2,11 @@ package by.it_academy.jdbc.app.dao.impl;
 
 import by.it_academy.jdbc.app.connector.DataBaseConnector;
 import by.it_academy.jdbc.app.dao.AbstractCrudDao;
+import by.it_academy.jdbc.app.exception.ApplicationBaseException;
 import by.it_academy.jdbc.app.mapper.ResultSetMapper;
 import by.it_academy.jdbc.app.mapper.impl.TestResultSetMapper;
 import by.it_academy.jdbc.app.model.Test;
+import by.it_academy.jdbc.app.model.User;
 import by.it_academy.jdbc.app.query.CrudJdbcSqlQueryHolder;
 import by.it_academy.jdbc.app.query.impl.TestSqlQueryHolderImpl;
 import by.it_academy.jdbc.app.statement.StatementInitializer;
@@ -14,17 +16,21 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 
 public class TestDaoJdbcImpl extends AbstractCrudDao<Test> {
     private final CrudJdbcSqlQueryHolder sqlQueryHolder;
     private final StatementInitializer<Test> statementInitializer;
     private final ResultSetMapper<Test> resultSetMapper;
+    private final UserDaoJdbcImpl userDao;
+    private String name;
 
-    public TestDaoJdbcImpl() {
+    {
         sqlQueryHolder = new TestSqlQueryHolderImpl();
         statementInitializer = new TestStatementInitializer();
         resultSetMapper = new TestResultSetMapper();
+        userDao = new UserDaoJdbcImpl();
     }
 
     @Override
@@ -42,29 +48,61 @@ public class TestDaoJdbcImpl extends AbstractCrudDao<Test> {
         return statementInitializer;
     }
 
-    public void resultTestByUserID (long id){
-        String sql = "select name, surname, mark, data, duration, comment from users join test on users.id = test.user_id where users.id=?";
+    public Test getTestWithUserById(long id) {
+        Test test = getById(id);
 
-        try(Connection con = getConnector().getConnection();
-            PreparedStatement ps = con.prepareStatement(sql))  {
+        if (test != null) {
+            test.setUser(userDao.getById(test.getUser_id()));
+        }
+        return test;
+    }
 
-            ps.setLong(1, id);
-            ResultSet rs = ps.executeQuery();
+    public List<Test> getAllTestWithUser() {
+        List<Test> tests = getAll();
+
+        for (Test test : tests) {
+            test.setUser(userDao.getById(test.getUser_id()));
+        }
+        return tests;
+    }
+
+    public Test getTestUserById(long id) {
+        Test test;
+
+        TestSqlQueryHolderImpl sqlHolder = (TestSqlQueryHolderImpl) getSqlHolder();
+        TestStatementInitializer initializer = (TestStatementInitializer) getStatementInitializer();
+        TestResultSetMapper mapper = (TestResultSetMapper) getResultSetMapper();
+
+        try (Connection con = getConnector().getConnection();
+             PreparedStatement ps = con.prepareStatement(sqlHolder.getTestUserByIdSql())) {
+
+            initializer.getByIdQueryStatement(ps, id);
 
 
-            while (rs.next()){
-                rs.getString("name");
-                rs.getString("surname");
-                rs.getInt("mark");
-                rs.getDate("data");
-                rs.getTime("duration");
-                rs.getString("comment");
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    test = mapper.processResultSet(rs);
+                    test.setUser(
+                            User.builder()
+                                    .name(rs.getString("NAME"))
+                                    .surname(rs.getString("SURNAME"))
+                                    .build()
+                    );
+
+                } else throw new ApplicationBaseException("Invalid entity id: " + id);
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw new ApplicationBaseException("Error process getById entity method: " + e.getMessage());
             }
+
 
         } catch (SQLException e) {
             e.printStackTrace();
             throw new ArithmeticException("Error in method resultTestByUserID" + e);
         }
+
+        return test;
 
     }
 }

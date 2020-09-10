@@ -7,6 +7,7 @@ import by.it_academy.jdbc.app.model.Book;
 import by.it_academy.jdbc.app.query.impl.BookSqlQueryHolderImpl;
 import by.it_academy.jdbc.app.query.CrudJdbcSqlQueryHolder;
 import by.it_academy.jdbc.app.statement.StatementInitializer;
+import by.it_academy.jdbc.app.statement.impl.BookStatementInitializer;
 
 public class BookDaoJdbcImpl extends AbstractCrudDao<Book> {
 
@@ -23,6 +24,6 @@ public class BookDaoJdbcImpl extends AbstractCrudDao<Book> {
 
     @Override
     protected StatementInitializer<Book> getStatementInitializer() {
-        return null;
+        return new BookStatementInitializer();
     }
 }

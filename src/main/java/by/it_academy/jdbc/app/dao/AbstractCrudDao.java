@@ -23,7 +23,7 @@ public abstract class AbstractCrudDao<T> extends BaseAbstractJdbcDao implements 
     public T getById(long id) {
         try (Connection conn = getConnector().getConnection();
              PreparedStatement prSt = conn.prepareStatement(getSqlHolder().getByIdSql())) {
-            prSt.setLong(1, id);
+            getStatementInitializer().getByIdQueryStatement(prSt, id);
 
             try (ResultSet rs = prSt.executeQuery()) {
                 if (rs.next()) {
@@ -72,7 +72,6 @@ public abstract class AbstractCrudDao<T> extends BaseAbstractJdbcDao implements 
              PreparedStatement prSt = conn.prepareStatement(getSqlHolder().updateSql())) {
 
             getStatementInitializer().updateQueryStatement(prSt, t);
-//            prSt.executeQuery();
             prSt.execute();
 
             return t;
@@ -106,6 +105,7 @@ public abstract class AbstractCrudDao<T> extends BaseAbstractJdbcDao implements 
     public void delete(long id) {
         try (Connection connection = DataBaseConnector.getInstance().getConnection();
              PreparedStatement stmt = connection.prepareStatement(getSqlHolder().deleteSql())) {
+            getStatementInitializer().deleteQueryStatement(stmt, id);
 
             stmt.setLong(1, id);
             stmt.executeUpdate();
