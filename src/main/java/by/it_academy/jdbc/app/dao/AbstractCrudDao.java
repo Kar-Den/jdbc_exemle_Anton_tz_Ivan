@@ -72,7 +72,8 @@ public abstract class AbstractCrudDao<T> extends BaseAbstractJdbcDao implements 
              PreparedStatement prSt = conn.prepareStatement(getSqlHolder().updateSql())) {
 
             getStatementInitializer().updateQueryStatement(prSt, t);
-            prSt.executeQuery();
+//            prSt.executeQuery();
+            prSt.execute();
 
             return t;
 

@@ -15,7 +15,7 @@ public class TestSqlQueryHolderImpl implements CrudJdbcSqlQueryHolder {
 
     @Override
     public String updateSql() {
-        return "update test set data = ?, mark = ?, user_id = ?, duration = ?, comment = ? where id = ?";
+        return "update test set data = ?, mark = ?, duration = ?, comment = ? where user_id = ?";
     }
 
     @Override

@@ -1,9 +1,11 @@
 import by.it_academy.jdbc.app.connector.DataBaseConnector;
 import by.it_academy.jdbc.app.constant.ApplicationConstant;
 import by.it_academy.jdbc.app.dao.impl.BookDaoJdbcImpl;
+import by.it_academy.jdbc.app.dao.impl.TestDaoJdbcImpl;
 import by.it_academy.jdbc.app.dao.impl.UserDaoJdbcImpl;
 import by.it_academy.jdbc.app.exception.ApplicationBaseException;
 import by.it_academy.jdbc.app.model.Role;
+import by.it_academy.jdbc.app.model.Test;
 import by.it_academy.jdbc.app.model.User;
 import org.h2.tools.RunScript;
 import org.h2.tools.Server;
@@ -12,7 +14,9 @@ import java.io.FileReader;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Time;
 import java.util.Arrays;
 
 public class Runner {
@@ -80,6 +84,36 @@ public class Runner {
         BookDaoJdbcImpl bookDaoJdbc = new BookDaoJdbcImpl();
         bookDaoJdbc.getAll().forEach(System.out::println);
         System.out.println(bookDaoJdbc.getById(2L));
+
+        System.out.println();
+        System.out.println("# test dao");
+        TestDaoJdbcImpl testDaoJdbc = new TestDaoJdbcImpl();
+        System.out.println("# create Test");
+        Test test = new Test(Date.valueOf("2020-09-10"), 7, 10, Time.valueOf("02:03:04"), "это было круто");
+        testDaoJdbc.create(test);
+
+        System.out.println("# getAll Test ");
+        testDaoJdbc.getAll().forEach(System.out::println);
+
+
+        System.out.println();
+        System.out.println("# delete Test ");
+        testDaoJdbc.delete(3);
+        testDaoJdbc.getAll().forEach(System.out::println);
+
+        System.out.println();
+        System.out.println("# Update Test ");
+        Test testUpdate = new Test(Date.valueOf("2020-09-10"), 7, 5, Time.valueOf("10:05:06"), "это Update, детка у user_id=7");
+        testDaoJdbc.update(testUpdate);
+
+        System.out.println();
+        System.out.println("# getById Test ");
+        System.out.println(testDaoJdbc.getById(4));
+
+        System.out.println();
+        System.out.println("# resultTestByUserID Test ");
+        testDaoJdbc.resultTestByUserID(7);
+
 
 //        SERVER.stop();
     }

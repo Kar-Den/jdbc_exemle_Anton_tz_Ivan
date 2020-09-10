@@ -34,3 +34,7 @@ CREATE table test
     comment  text,
     foreign key (user_id) references USERS (ID) on delete no action on update cascade
 );
+
+select NAME, SURNAME, MARK, DATA, DURATION, COMMENT from USERS join TEST on USERS.ID = test.user_id;
+
+select NAME, SURNAME, MARK, DATA, DURATION, COMMENT from USERS join TEST on USERS.ID = test.user_id where USERS.ID=7;
