@@ -4,7 +4,7 @@ import by.it_academy.jdbc.app.dao.AbstractCrudDao;
 import by.it_academy.jdbc.app.mapper.ResultSetMapper;
 import by.it_academy.jdbc.app.mapper.impl.BookResultSetMapper;
 import by.it_academy.jdbc.app.model.Book;
-import by.it_academy.jdbc.app.query.BookSqlQueryHolderImpl;
+import by.it_academy.jdbc.app.query.impl.BookSqlQueryHolderImpl;
 import by.it_academy.jdbc.app.query.CrudJdbcSqlQueryHolder;
 import by.it_academy.jdbc.app.statement.StatementInitializer;
 

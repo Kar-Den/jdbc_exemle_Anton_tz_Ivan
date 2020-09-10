@@ -1,4 +1,6 @@
-package by.it_academy.jdbc.app.query;
+package by.it_academy.jdbc.app.query.impl;
+
+import by.it_academy.jdbc.app.query.CrudJdbcSqlQueryHolder;
 
 public class BookSqlQueryHolderImpl implements CrudJdbcSqlQueryHolder {
     @Override
